@@ -39,7 +39,7 @@ for num in range(9, -1, -1):
 #+と=を表示する
 c = 4
 r = 1
-operators = ["C", "(", ")", "", "", "**2", "**3", "**", "+", "="]
+operators = ["C", "(", ")", "/", "*", "**2", "**3", "**", "+", "="]
 for ope in operators:
     button = tk.Button(root, text=f"{ope}", width=4, height=2, font=("", 30))
     button.grid(row=r, column=c)
