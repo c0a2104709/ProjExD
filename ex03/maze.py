@@ -10,8 +10,11 @@ def key_up(event):
     key = ""
 
 def main_proc():
-    global kokaton
-    global cx, cy, mx, my
+    global cx, cy, mx, my, kokaton, goal
+    goal = tk.PhotoImage(file="fig/9.png") #右下のマスにゴール地点としてこうかとんの画像を描画
+    canvas.create_image(13*100+50, 7*100+50,
+                        image=goal,
+                        tag="goal")
     if key ==  "Up":
         kokaton = tk.PhotoImage(file="fig/6.png")#上を向いているこうかとんの画像を描画
         my -= 1
@@ -40,6 +43,7 @@ def main_proc():
                         tag="kokaton")
     canvas.coords("kokaton", cx, cy)
     if cx == 13*100+50 and cy == 7*100+50: #右下のマスについたら終了させる
+        goal = None
         return
     root.after(100, main_proc)
 
@@ -58,10 +62,6 @@ if __name__ == "__main__":
                         image=kokaton, 
                         tag="kokaton")
 
-    goal = tk.PhotoImage(file="fig/9.png") #右下のマスにゴール地点としてこうかとんの画像を描画
-    canvas.create_image(13*100+50, 7*100+50,
-                        image=goal,
-                        tag="goal")
     key = ""
     root.bind("<KeyPress>", key_down)
     root.bind("<KeyRelease>", key_up)
