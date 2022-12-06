@@ -10,16 +10,22 @@ def key_up(event):
     key = ""
 
 def main_proc():
+    global kokaton
     global cx, cy, mx, my
     if key ==  "Up":
+        kokaton = tk.PhotoImage(file="fig/6.png")
         my -= 1
     if key == "Down":
+        kokaton = tk.PhotoImage(file="fig/4.png")
         my += 1
     if key == "Left":
+        kokaton = tk.PhotoImage(file="fig/5.png")
         mx -= 1
     if key == "Right":
+        kokaton = tk.PhotoImage(file="fig/2.png")
         mx += 1
     if maze_lst[mx][my] == 1: #移動先が壁だったら
+        kokaton = tk.PhotoImage(file="fig/0.png")
         if key ==  "Up":
             my += 1
         if key == "Down":
@@ -29,7 +35,12 @@ def main_proc():
         if key == "Right":
             mx -= 1
     cx, cy = mx*100+50, my*100+50
+    canvas.create_image(cx, cy, 
+                        image=kokaton, 
+                        tag="kokaton")
     canvas.coords("kokaton", cx, cy)
+    if cx == 13*100+50 and cy == 7*100+50:
+        return
     root.after(100, main_proc)
 
 if __name__ == "__main__":
@@ -40,12 +51,17 @@ if __name__ == "__main__":
     maze_lst = maze_maker.make_maze(15, 9)
     #print(maze_lst)
     maze_maker.show_maze(canvas, maze_lst)
-    kokaton = tk.PhotoImage(file="fig/8.png")
     mx, my = 1, 1
     cx, cy = mx*100+50, my*100+50
+    kokaton = tk.PhotoImage(file="fig/8.png")
     canvas.create_image(cx, cy, 
                         image=kokaton, 
                         tag="kokaton")
+
+    goal = tk.PhotoImage(file="fig/9.png")
+    canvas.create_image(13*100+50, 7*100+50,
+                        image=goal,
+                        tag="goal")
     key = ""
     root.bind("<KeyPress>", key_down)
     root.bind("<KeyRelease>", key_up)
