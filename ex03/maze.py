@@ -6,7 +6,7 @@ def key_down(event):
 
 def key_up(event):
     global key
-    key = event.keysym
+    key = ""
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("迷えるこうかとん")
