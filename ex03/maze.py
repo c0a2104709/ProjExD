@@ -1,5 +1,6 @@
 import tkinter as tk
 import maze_maker
+import tkinter.messagebox as tkm
 
 def key_down(event):
     global key
@@ -44,6 +45,7 @@ def main_proc():
     canvas.coords("kokaton", cx, cy)
     if cx == 13*100+50 and cy == 7*100+50: #右下のマスについたら終了させる
         goal = None
+        tkm.showinfo("ゴール", "ゴールしました")
         return
     root.after(100, main_proc)
 
