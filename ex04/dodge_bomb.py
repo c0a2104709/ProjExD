@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import random
+import time
 
 #練習７
 def check_bound(obj_rct, scr_rct):
@@ -72,6 +73,11 @@ def main():
     txt = font.render(str(time), True, (0, 0, 0))
     scrn_sfc.blit(txt, (750, 50))
 
+    if pg.time.get_ticks() >= 15000:
+        font2 = pg.font.Font(None, 150)
+        txt2 = font.render("CLEAR", True, (0, 0, 0))
+        scrn_sfc.blit(txt2, (600, 200))
+
     #練習２
     while True:
         scrn_sfc.blit(pgbg_sfc, pgbg_rct)
@@ -80,10 +86,8 @@ def main():
                 return
         
         t = pg.time.get_ticks()
-        #1000ミリ秒毎に時間を残り時間を減らす
-        if t % 1000 == 0:
-            time -= 1
-        txt = font.render(str(time), True, (0, 0, 0))
+        #1000ミリ秒毎に残り時間を減らす
+        txt = font.render(str(t/1000), True, (0, 0, 0))
         scrn_sfc.blit(txt, (750, 50))
 
         #練習４
@@ -128,8 +132,8 @@ def main():
             yoko2, tate2 = check_bound(bomb2_rct, scrn_rct)
             vx2 *= yoko2
             vy2 *= tate2
-        if tori_rct.colliderect(bomb2_rct):
-            return
+            if tori_rct.colliderect(bomb2_rct):
+                return
 
         #３個目の爆弾のプログラム
         if pg.time.get_ticks() >= 10000:
@@ -138,14 +142,15 @@ def main():
             yoko3, tate3 = check_bound(bomb3_rct, scrn_rct)
             vx3 *= yoko3
             vy3 *= tate3
-        if tori_rct.colliderect(bomb3_rct):
-            return
+            if tori_rct.colliderect(bomb3_rct):
+                return
 
         #６０秒経過後
-        if pg.time.get_ticks() >= 60000:
-            font2 = pg.font.Font(None, 100)
-            txt2 = font.render("CLEAR", True, (0, 0, 0))
-            scrn_sfc.blit(txt2, (600, 200))
+        if pg.time.get_ticks() >= 1000:
+            font2 = pg.font.Font(None, 150)
+            txt2 = font.render("CLEAR", True, (255, 0, 0))
+            scrn_sfc.blit(txt2, (700, 250))
+            pg.display.update()
             #終了させずに10秒停止
             pg.time.wait(10000)
             return
