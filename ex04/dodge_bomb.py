@@ -146,7 +146,7 @@ def main():
                 return
 
         #６０秒経過後
-        if pg.time.get_ticks() >= 1000:
+        if pg.time.get_ticks() >= 60000:
             font2 = pg.font.Font(None, 150)
             txt2 = font.render("CLEAR", True, (255, 0, 0))
             scrn_sfc.blit(txt2, (700, 250))
