@@ -87,7 +87,10 @@ def main():
         
         t = pg.time.get_ticks()
         #1000ミリ秒毎に残り時間を減らす
-        txt = font.render(str(t/1000), True, (0, 0, 0))
+        if pg.time.get_ticks() >= 50000:
+            txt = font.render(str(t/1000), True, (255, 0, 0))
+        else:
+            txt = font.render(str(t/1000), True, (0, 0, 0))
         scrn_sfc.blit(txt, (750, 50))
 
         #練習４
