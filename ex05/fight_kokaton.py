@@ -1,6 +1,9 @@
 import pygame as pg
+import os
 import random
 import sys
+
+main_dir = os.path.split(os.path.abspath(__file__))[0]
 
 class Screen:
     def __init__(self, title, wh, img_path):
@@ -68,6 +71,27 @@ class Bomb:
         self.blit(scr)
 
 
+class Ufo:
+    def __init__(self, img_path, ratio, vxy, scr:Screen):
+
+        self.sfc = pg.image.load(img_path)
+        self.sfc = pg.transform.rotozoom(self.sfc, 0, ratio)
+        self.rct = self.sfc.get_rect()
+        self.rct.centerx = random.randint(0, scr.rct.width)
+        self.rct.centery = random.randint(0, scr.rct.height)
+        self.vx, self.vy = vxy
+
+    def blit(self, scr:Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr:Screen):
+        self.rct.move_ip(self.vx, self.vy)
+        yoko, tate = check_bound(self.rct, scr.rct)
+        self.vx *= yoko
+        self.vy *= tate
+        self.blit(scr)
+
+
 def check_bound(obj_rct, scr_rct):
     """
     第1引数：こうかとんrectまたは爆弾rect
@@ -82,7 +106,35 @@ def check_bound(obj_rct, scr_rct):
     return yoko, tate
 
 
+def load_sound(file):
+    """because pygame can be be compiled without mixer."""
+    if not pg.mixer:
+        return None
+    file = os.path.join(main_dir, "data", file)
+    try:
+        sound = pg.mixer.Sound(file)
+        return sound
+    except pg.error:
+        print("Warning, unable to load, %s" % file)
+    return None
+
+
+
 def main():
+    if pg.get_sdl_version()[0] == 2:
+        pg.mixer.pre_init(44100, 32, 2, 1024)
+    pg.init()
+    if pg.mixer and not pg.mixer.get_init():
+        print("Warning, no sound")
+        pg.mixer = None
+
+    boom_sound = load_sound("boom.wav")
+    shoot_sound = load_sound("car_door.wav")
+    if pg.mixer:
+        music = os.path.join(main_dir, "data", "house_lo.wav")
+        pg.mixer.music.load(music)
+        pg.mixer.music.play(-1)
+
     clock =pg.time.Clock()
 
     # 練習１
@@ -94,17 +146,20 @@ def main():
 
     # 練習５
     bkd_lst = []
-    for i in range(4):
+    for i in range(3):
         bkd = Bomb((255, 0, 0), 10, (+1, +1), scr)
         bkd_lst.append(bkd)
     
-    for j in range(4):
+    for j in range(3):
         bkd = Bomb((0, 255, 0), 10, (0, +1), scr)
         bkd_lst.append(bkd)
 
-    for k in range(4):
+    for k in range(3):
         bkd = Bomb((0, 0, 255), 10, (+1, 0), scr)
         bkd_lst.append(bkd)
+
+    ufo = Ufo("ex05/data/alien1.png",1.0,(+3, +3),scr)
+    ufo.update(scr)
 
     # 練習２
     #mode = 1
@@ -116,6 +171,7 @@ def main():
             #if event.type == pg.K_b:
             #    mode = 0
         kkt.update(scr)
+        ufo.update(scr)
         for i in range(len(bkd_lst)):
             bkd_lst[i].update(scr)
             if kkt.rct.colliderect(bkd_lst[i].rct):
@@ -124,6 +180,8 @@ def main():
                 #else:
                 #    continue
                 return
+        if kkt.rct.colliderect(ufo.rct):
+            return
         pg.display.update()
         clock.tick(1000)
 
