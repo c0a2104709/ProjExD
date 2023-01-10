@@ -13,3 +13,6 @@
 - 床にスコアが増える食べ物を追加
 - スコアの表示
 - 押した矢印キーの方向に動き続けるように変更
+### 参考URL
+https://office54.net/python/tkinter/python-tkinter-label#section2
+https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q13271217578
